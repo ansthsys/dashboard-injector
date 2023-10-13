@@ -26,7 +26,8 @@ export default function Router() {
         </DashboardLayout>
       ),
       children: [
-        { element: <IndexPage />, index: true },
+        // { element: <IndexPage />, index: true },
+        { element: <Navigate to="/inject" replace />, index: true },
         { path: 'inject', element: <InjectorPage /> },
         { path: 'read', element: <ReadPage /> },
         { path: 'history', element: <HistoryPage /> },
