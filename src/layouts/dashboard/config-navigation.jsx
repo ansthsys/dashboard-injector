@@ -17,6 +17,12 @@ const navConfig = [
     path: '/inject',
     icon: icon('ic_inject'),
   },
+  
+  {
+    title: 'Read',
+    path: '/read',
+    icon: icon('ic_read'),
+  },
   {
     title: 'History',
     path: '/history',

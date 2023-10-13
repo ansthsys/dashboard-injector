@@ -5,6 +5,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const InjectorPage = lazy(() => import('src/pages/injector-tools'));
+export const ReadPage = lazy(() => import('src/pages/read-tools'));
 export const HistoryPage = lazy(() => import('src/pages/history-inject'));
 // export const BlogPage = lazy(() => import('src/pages/blog'));
 // export const UserPage = lazy(() => import('src/pages/user'));
@@ -27,6 +28,7 @@ export default function Router() {
       children: [
         { element: <IndexPage />, index: true },
         { path: 'inject', element: <InjectorPage /> },
+        { path: 'read', element: <ReadPage /> },
         { path: 'history', element: <HistoryPage /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },

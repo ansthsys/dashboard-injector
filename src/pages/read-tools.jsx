@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { HistoryView } from 'src/sections/history-inject/view';
+import { ReadView } from 'src/sections/read-tools/view';
 
 // ----------------------------------------------------------------------
 
-export default function HistoryPage() {
+export default function ReadPage() {
   return (
     <>
       <Helmet>
-        <title> eFishery | History Inject </title>
+        <title> eFishery | Read Tools </title>
       </Helmet>
 
-      <HistoryView />
+      <ReadView />
     </>
   );
 }

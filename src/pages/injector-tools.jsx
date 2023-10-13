@@ -4,7 +4,7 @@ import { InjectorView } from 'src/sections/injector-tools/view';
 
 // ----------------------------------------------------------------------
 
-export default function InjectorTools() {
+export default function InjectorPage() {
   return (
     <>
       <Helmet>
