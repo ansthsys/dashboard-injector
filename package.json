@@ -4,6 +4,7 @@
   "licence": "MIT",
   "version": "1.8.0",
   "private": false,
+  "proxy": "https://l4dz56mh-3000.asse.devtunnels.ms",
   "scripts": {
     "dev": "vite",
     "start": "vite preview",
