@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
+  Box,
   Paper,
   Table,
   TableRow,
@@ -13,7 +14,6 @@ import {
   TableHead,
   TableContainer,
   CircularProgress,
-  Box,
 } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ export default function Injector() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          minHeight: '70vh',
+          height: '50vh',
         }}
       >
         <CircularProgress />

@@ -85,7 +85,7 @@ export default function Injector() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100vh',
+          height: '50vh',
         }}
       >
         <CircularProgress />
