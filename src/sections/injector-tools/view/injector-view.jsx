@@ -5,25 +5,47 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
+  Box,
   Paper,
   Table,
+  Button,
   TableRow,
+  Backdrop,
   TableBody,
   TableCell,
   TableHead,
   TableContainer,
-  Button,
-  Box,
   CircularProgress,
 } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export default function Injector() {
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
 
-  function handleInject(id) {
-    console.log('Injected', id);
+  function handleInject(item) {
+    const URI = 'https://witty-selected-humpback.ngrok-free.app';
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const requestOptions = {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(item),
+    };
+
+    setLoading(true);
+
+    fetch(`${URI}/write_data`, requestOptions)
+      .then((res) => {
+        setTimeout(() => {
+          getListInjectable();
+        }, 0);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }
 
   function getListInjectable() {
@@ -36,12 +58,17 @@ export default function Injector() {
         },
       };
 
+      setLoading(true);
+
       fetch(`${URI}/eeprom`, requestOptions)
         .then((res) => res.json())
         .then((res) => setData(res.data))
         .catch((err) => console.log(err));
     } catch (error) {
+      setData(null);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -51,14 +78,14 @@ export default function Injector() {
 
   console.log(data);
 
-  if (!data) {
+  if (data === null) {
     return (
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          minHeight: '70vh',
+          height: '100vh',
         }}
       >
         <CircularProgress />
@@ -68,6 +95,19 @@ export default function Injector() {
 
   return (
     <Container>
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '50vh',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </Backdrop>
+
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Injector Tools</Typography>
       </Stack>
@@ -84,21 +124,29 @@ export default function Injector() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {row.barcode}
-                </TableCell>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.type}</TableCell>
-                <TableCell align="center">{row.version}</TableCell>
-                <TableCell align="center">
-                  <Button variant="contained" onClick={() => handleInject(row.id)}>
-                    Inject
-                  </Button>
+            {data.length > 0 ? (
+              data.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    {row.barcode}
+                  </TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.type}</TableCell>
+                  <TableCell align="center">{row.version}</TableCell>
+                  <TableCell align="center">
+                    <Button variant="contained" onClick={() => handleInject(row)}>
+                      Inject
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow key="exclusive" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell colSpan={5} align="center">
+                  Data is empty
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
