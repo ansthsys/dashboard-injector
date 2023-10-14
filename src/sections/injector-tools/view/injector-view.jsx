@@ -13,6 +13,8 @@ import {
   TableHead,
   TableContainer,
   Button,
+  Box,
+  CircularProgress,
 } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -50,7 +52,18 @@ export default function Injector() {
   console.log(data);
 
   if (!data) {
-    return null;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '70vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
