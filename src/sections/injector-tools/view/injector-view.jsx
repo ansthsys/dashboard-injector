@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
   Box,
+  Chip,
   Paper,
   Table,
   Button,
@@ -120,6 +121,7 @@ export default function Injector() {
               <TableCell align="center">Machine Name</TableCell>
               <TableCell align="center">Type</TableCell>
               <TableCell align="center">Version</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -134,9 +136,22 @@ export default function Injector() {
                   <TableCell align="center">{row.type}</TableCell>
                   <TableCell align="center">{row.version}</TableCell>
                   <TableCell align="center">
-                    <Button variant="contained" onClick={() => handleInject(row)}>
-                      Inject
-                    </Button>
+                    {row.status === 'inject' ? (
+                      <Chip label="Available" color="primary" size="small" variant="outlined" />
+                    ) : (
+                      <Chip label="Injected" color="warning" size="small" variant="outlined" />
+                    )}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.status === 'inject' ? (
+                      <Button variant="contained" onClick={() => handleInject(row)}>
+                        Inject
+                      </Button>
+                    ) : (
+                      <Button variant="outlined" disabled>
+                        Inject
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))
