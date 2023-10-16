@@ -12,14 +12,21 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TextField,
   TableContainer,
+  InputAdornment,
   CircularProgress,
 } from '@mui/material';
+
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function Injector() {
   const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
+  const [searchKey, setSearchKey] = useState('');
+  const displayData = searchKey ? filteredData : data;
 
   function getListInjectable() {
     try {
@@ -52,6 +59,23 @@ export default function Injector() {
     return new Intl.DateTimeFormat('id-ID', options).format(time);
   }
 
+  function searchHandle(e) {
+    const key = e.target.value;
+    setSearchKey(key);
+
+    // eslint-disable-next-line arrow-body-style
+    const filter = data.filter((item) => {
+      return (
+        item.barcode.toLowerCase().includes(key.toLowerCase()) ||
+        item.name.toLowerCase().includes(key.toLowerCase()) ||
+        item.type.toLowerCase().includes(key.toLowerCase()) ||
+        item.version.toLowerCase().includes(key.toLowerCase())
+      );
+    });
+
+    setFilteredData(filter);
+  }
+
   useEffect(() => {
     getListInjectable();
   }, []);
@@ -77,6 +101,21 @@ export default function Injector() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">History Inject</Typography>
+
+        <TextField
+          placeholder="Search data"
+          onChange={(e) => searchHandle(e)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Iconify
+                  icon="eva:search-fill"
+                  sx={{ ml: 1, width: 20, height: 20, color: 'text.disabled' }}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
       </Stack>
 
       <TableContainer component={Paper}>
@@ -90,16 +129,24 @@ export default function Injector() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" align="center" scope="row">
-                  {row.barcode}
+            {data.length > 0 ? (
+              displayData.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" align="center" scope="row">
+                    {row.barcode}
+                  </TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{formatTime(row.DateTime)}</TableCell>
+                  <TableCell align="center">{formatDate(row.DateTime)}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow key="exclusive" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell colSpan={5} align="center">
+                  Data is empty
                 </TableCell>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{formatTime(row.DateTime)}</TableCell>
-                <TableCell align="center">{formatDate(row.DateTime)}</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
