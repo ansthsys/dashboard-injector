@@ -15,15 +15,22 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TextField,
   TableContainer,
+  InputAdornment,
   CircularProgress,
 } from '@mui/material';
+
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function Injector() {
   const [loading, setLoading] = useState(false);
+  const [searchKey, setSearchKey] = useState('');
   const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
+  const displayData = searchKey ? filteredData : data;
 
   function handleInject(item) {
     const URI = 'https://witty-selected-humpback.ngrok-free.app';
@@ -73,11 +80,26 @@ export default function Injector() {
     }
   }
 
+  function searchHandle(e) {
+    const key = e.target.value;
+    setSearchKey(key);
+
+    // eslint-disable-next-line arrow-body-style
+    const filter = data.filter((item) => {
+      return (
+        item.barcode.toLowerCase().includes(key.toLowerCase()) ||
+        item.name.toLowerCase().includes(key.toLowerCase()) ||
+        item.type.toLowerCase().includes(key.toLowerCase()) ||
+        item.version.toLowerCase().includes(key.toLowerCase())
+      );
+    });
+
+    setFilteredData(filter);
+  }
+
   useEffect(() => {
     getListInjectable();
   }, []);
-
-  console.log(data);
 
   if (data === null) {
     return (
@@ -111,6 +133,21 @@ export default function Injector() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Injector Tools</Typography>
+
+        <TextField
+          placeholder="Search data"
+          onChange={(e) => searchHandle(e)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Iconify
+                  icon="eva:search-fill"
+                  sx={{ ml: 1, width: 20, height: 20, color: 'text.disabled' }}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
       </Stack>
 
       <TableContainer component={Paper}>
@@ -127,7 +164,7 @@ export default function Injector() {
           </TableHead>
           <TableBody>
             {data.length > 0 ? (
-              data.map((row) => (
+              displayData.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {row.barcode}
