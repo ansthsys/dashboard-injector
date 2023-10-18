@@ -68,8 +68,8 @@ export default function Injector() {
       return (
         item.barcode.toLowerCase().includes(key.toLowerCase()) ||
         item.name.toLowerCase().includes(key.toLowerCase()) ||
-        item.type.toLowerCase().includes(key.toLowerCase()) ||
-        item.version.toLowerCase().includes(key.toLowerCase())
+        formatTime(item.DateTime).toLocaleLowerCase().includes(key.toLowerCase()) ||
+        formatDate(item.DateTime).toLocaleLowerCase().includes(key.toLowerCase())
       );
     });
 
